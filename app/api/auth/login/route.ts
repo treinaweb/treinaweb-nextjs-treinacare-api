@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import bcyrpt from "bcrypt";
 import { signRefreshToken, signToken } from "@/app/lib/jwt";
 
 const prisma = new PrismaClient();
@@ -20,14 +19,14 @@ export async function POST(request: Request) {
       where: { email }
     });
 
-    if(!user || !user.active) {
+    if(!user) {
       return NextResponse.json(
         { message: 'Credenciais inválidas' },
         { status: 401} 
       )
     }
 
-    const passwordMatch = await bcyrpt.compare(password, user.password);
+    const passwordMatch = password === user.password;
 
     if(!passwordMatch) {
       return NextResponse.json(
@@ -39,13 +38,11 @@ export async function POST(request: Request) {
     const token = await signToken({
       id: user.id,
       email: user.email,
-      role: user.role
     });
 
     const refreshToken = await signRefreshToken({
       id: user.id,
       email: user.email,
-      role: user.role
     });
 
     return NextResponse.json({

@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./app/lib/jwt";
-import { Role } from "./app/backend/enum/role";
 
 export async function middleware(request: NextRequest) {
-  if(request.method === 'GET') {
-    return NextResponse.next();
-  }
-
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.replace('Bearer ', '');
 
@@ -20,22 +15,25 @@ export async function middleware(request: NextRequest) {
   try {
     const decoded = await verifyToken(token);
 
-    if(request.method === 'DELETE') {
-      if(!checkRole(decoded.role as string, [Role.ADMIN])) {
-        return NextResponse.json(
-          { message: 'Acesso não autorizado' },
-          { status: 403 }
-        )
-      }
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-user-id', decoded.id as string);
+
+    if (request.method === 'GET') {
+      const response = NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+      return response;
     }
 
-    if(request.method === 'POST' || request.method === 'PATCH') {
-      if(!checkRole(decoded.role as string, [Role.ADMIN, Role.EDITOR])) {
-        return NextResponse.json(
-          { message: 'Acesso não autorizado' },
-          { status: 403 }
-        )
-      }
+    if (request.method === 'POST') {
+      const response = NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+      return response;
     }
 
     return NextResponse.next();
@@ -48,9 +46,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/posts/:path*']
-}
-
-function checkRole(userRole: string, allowedRoles: Role[]): boolean {
- return allowedRoles.includes(userRole.toLocaleLowerCase() as Role);
+ matcher: [
+    '/api/appointments/:path*',
+    '/api/doctors/:path*/schedule',
+    '/api/user',
+  ]
 }

@@ -10,7 +10,7 @@ export async function signToken(payload: any) {
 
   return await new jose.SignJWT(payload)
   .setProtectedHeader({ alg: 'HS256'})
-  .setExpirationTime('10s')
+  .setExpirationTime('1h')
   .sign(JWT_SECRET);
 }
 
@@ -21,7 +21,7 @@ export async function signRefreshToken(payload: any) {
 
   return await new jose.SignJWT(payload)
   .setProtectedHeader({ alg: 'HS256'})
-  .setExpirationTime('2min')
+  .setExpirationTime('2h')
   .sign(JWT_SECRET);
 }
 

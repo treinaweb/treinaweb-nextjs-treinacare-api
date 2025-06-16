@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       where: { email: email as string }
     });
 
-    if(!user || !user.active) {
+    if(!user) {
       return NextResponse.json(
         { message: 'Credenciais inválidas' },
         { status: 401} 
@@ -32,13 +32,11 @@ export async function POST(request: Request) {
     const newToken = await signToken({
       id: user.id,
       email: user.email,
-      role: user.role
     });
 
     const refreshToken = await signRefreshToken({
       id: user.id,
       email: user.email,
-      role: user.role
     });
 
     return NextResponse.json({
