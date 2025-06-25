@@ -17,12 +17,12 @@ export async function POST(
       );
     }
 
-    const doctorId = await params.id;
+    const { id } = await params;
     const { date, time } = await request.json();
 
     // Verificar se o médico existe
     const doctor = await prisma.doctor.findUnique({
-      where: { id: doctorId }
+      where: { id: id }
     });
 
     if (!doctor) {
@@ -33,7 +33,7 @@ export async function POST(
     }
 
     const existingAppointment = await prisma.appointment.findFirst({
-      where: { userId, doctorId, date, time, status: 'aberto' }
+      where: { userId, id, date, time, status: 'aberto' }
     });
 
     if (existingAppointment) {
@@ -45,7 +45,7 @@ export async function POST(
 
     const appointment = await prisma.appointment.create({
       data: {
-        doctorId,
+        doctorId: id,
         userId,
         date,
         time,

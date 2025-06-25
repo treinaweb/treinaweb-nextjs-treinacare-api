@@ -7,10 +7,11 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   const doctor = await prisma.doctor.findUnique(
     {
       where: {
-        id: params.id,
+        id,
       },
     }
   );
