@@ -19,7 +19,6 @@ O TreinaCare é uma plataforma de agendamento médico que permite aos usuários:
 - **Prisma** - ORM para banco de dados
 - **SQLite** - Banco de dados (desenvolvimento)
 - **JWT (jose)** - Autenticação e autorização
-- **bcrypt** - Hash de senhas
 
 ## 🚀 Como Executar o Projeto
 
@@ -171,6 +170,7 @@ npx prisma db push
 Este projeto serve como base para expandir funcionalidades como:
 
 - Implementação de hash de senhas com bcrypt
+- **bcrypt** - Hash de senhas
 - Notificações por email
 - Upload de imagens
 - Paginação avançada
