@@ -1,6 +1,6 @@
 # 🏥 TreinaCare API
 
-Sou instrutor da TreinaWeb e criei esta API como parte do projeto prático **TreinaCare**, uma aplicação para agendamento médico.
+API como parte do projeto prático **TreinaCare**, uma aplicação para agendamento médico.
 
 ## 📋 Sobre o Projeto
 
